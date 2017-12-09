@@ -1,0 +1,1 @@
+The block wishlist module adds wishlist functionality to your site. Customers can add products to their wishlists and share their list publicly with friends and family. This module comes standard with all thirty bees installations.
