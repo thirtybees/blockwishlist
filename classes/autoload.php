@@ -22,6 +22,7 @@ spl_autoload_register(
         if (in_array($class, [
             'BlockWishListModule\\Controllers',
             'BlockWishListModule\\WishList',
+            'BlockWishListModule\\Krona',
         ])) {
             // project-specific namespace prefix
             $prefix = 'BlockWishListModule\\';

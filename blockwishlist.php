@@ -24,6 +24,7 @@
  */
 
 use BlockWishListModule\WishList;
+use BlockWishListModule\Krona;
 
 if (!defined('_TB_VERSION_')) {
     exit;
@@ -144,8 +145,9 @@ class BlockWishList extends Module
         ) {
             return false;
         }
-        /* This hook is optional */
+        /* This hooks are optional */
         $this->registerHook('displayMyAccountBlock');
+        $this->registerHook('actionRegisterKronaAction');
 
         return true;
     }
@@ -497,6 +499,10 @@ class BlockWishList extends Module
             return $this->html;
         }
 
+    }
+
+    public function hookActionRegisterKronaAction($params) {
+      return Krona::getActions();
     }
 
     private function displayProducts($idWishlist)

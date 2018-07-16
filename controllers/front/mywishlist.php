@@ -23,6 +23,7 @@
  * PrestaShop is an internationally registered trademark & property of PrestaShop SA
  */
 use BlockWishListModule\WishList;
+use BlockWishListModule\Krona;
 
 /**
  * @since 1.5.0
@@ -114,6 +115,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
                             $this->module->getLocalPath().'mails/'
                         );
 
+                        Krona::wishlistCreated($wishlist);
                         Tools::redirect($this->context->link->getModuleLink('blockwishlist', 'mywishlist'));
                     }
                 }

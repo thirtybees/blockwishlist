@@ -98,9 +98,11 @@ class Controllers
                     $wishlist->token = strtoupper(substr(sha1(uniqid(rand(), true)._COOKIE_KEY_.$context->customer->id), 0, 16));
                     $wishlist->add();
                     $context->cookie->id_wishlist = (int) $wishlist->id;
+                    Krona::wishlistCreated($wishlist);
                 }
                 if ($add && $quantity) {
                     WishList::addProduct($context->cookie->id_wishlist, $context->customer->id, $idProduct, $idProductAttribute, $quantity);
+                    Krona::productAdded($idProduct);
                 } else {
                     if ($delete) {
                         WishList::removeProduct($context->cookie->id_wishlist, $context->customer->id, $idProduct, $idProductAttribute);
@@ -260,6 +262,7 @@ class Controllers
                     );
                 }
             }
+            Krona::sendWishList();
         }
     }
 }
