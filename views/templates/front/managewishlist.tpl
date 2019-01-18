@@ -72,7 +72,7 @@
 							</select>
 							{if $wishlists|count > 1}
 								<br /><br />
-								{l s='Move'}:
+								{l s='Move' mod='blockwishlist'}:
 								<br />
                                 {foreach name=wl from=$wishlists item=wishlist}
                                     {if $smarty.foreach.wl.first}
