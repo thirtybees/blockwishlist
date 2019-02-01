@@ -256,7 +256,7 @@ class Controllers
                         $customer->firstname.' '.$customer->lastname,
                         null,
                         null,
-                        __DIR__.'/mails/'
+                        __DIR__.'/../mails/'
                     );
                 }
             }
