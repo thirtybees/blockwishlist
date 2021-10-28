@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{if isset($wishlists) && count($wishlists) > 1}
+{if isset($wishlists) && is_array($wishlists) && count($wishlists) > 1}
 <div class="wishlist">
 	{foreach name=wl from=$wishlists item=wishlist}
 		{if $smarty.foreach.wl.first}

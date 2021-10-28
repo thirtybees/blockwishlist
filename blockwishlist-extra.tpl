@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{if isset($wishlists) && count($wishlists) > 1}
+{if isset($wishlists) && is_array($wishlists) && count($wishlists) > 1}
 <div class="buttons_bottom_block no-print">
 	<div id="wishlist_button">
 		<select id="idWishlist">
