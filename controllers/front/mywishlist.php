@@ -57,7 +57,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
         } elseif (!empty($action) && method_exists($this, 'ajaxProcess'.Tools::toCamelCase($action))) {
             $this->{'ajaxProcess'.Tools::toCamelCase($action)}();
         } else {
-            die(json_encode(['error' => 'method doesn\'t exist']));
+            $this->jsonResponse(['error' => 'method doesn\'t exist']);
         }
     }
 
@@ -169,50 +169,36 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
     public function ajaxProcessDeleteList()
     {
         if (!$this->context->customer->isLogged()) {
-            die(
-            json_encode(
-                [
-                    'success' => false,
-                    'error'   => $this->module->l('You aren\'t logged in', 'mywishlist'),
-                ]
-            )
-            );
+            $this->jsonResponse([
+                'success' => false,
+                'error'   => $this->module->l('You aren\'t logged in', 'mywishlist'),
+            ]);
         }
 
         $idWishlist = Tools::getValue('id_wishlist');
 
         $wishlist = new WishList((int) $idWishlist);
         if (Validate::isLoadedObject($wishlist) && $wishlist->id_customer == $this->context->customer->id) {
-            $defaultChange = !!$wishlist->default;
             $idCustomer = $wishlist->id_customer;
             $wishlist->delete();
-        } else {
-            die(
-            json_encode(
-                [
-                    'success' => false,
-                    'error'   => $this->module->l('Cannot delete this wishlist', 'mywishlist'),
-                ]
-            )
-            );
-        }
 
-        if ($defaultChange) {
-            $array = WishList::getDefault($idCustomer);
-
-            if (count($array)) {
-                die(
-                json_encode(
-                    [
+            if ($wishlist->default) {
+                $array = WishList::getDefault($idCustomer);
+                if ($array) {
+                    $this->jsonResponse([
                         'success'    => true,
                         'id_default' => $array[0]['id_wishlist'],
-                    ]
-                )
-                );
+                    ]);
+                }
             }
+        } else {
+            $this->jsonResponse([
+                'success' => false,
+                'error'   => $this->module->l('Cannot delete this wishlist', 'mywishlist'),
+            ]);
         }
 
-        die(json_encode(['success' => true]));
+        $this->jsonResponse(['success' => true]);
     }
 
     /**
@@ -223,14 +209,10 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
     public function ajaxProcessSetDefault()
     {
         if (!$this->context->customer->isLogged()) {
-            die(
-            json_encode(
-                [
-                    'success' => false,
-                    'error'   => $this->module->l('You aren\'t logged in', 'mywishlist'),
-                ]
-            )
-            );
+            $this->jsonResponse([
+                'success' => false,
+                'error'   => $this->module->l('You aren\'t logged in', 'mywishlist'),
+            ]);
         }
 
         $default = Tools::getIsset('default');
@@ -240,11 +222,11 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
         if ($default) {
             $wishlist = new WishList((int) $idWishlist);
             if (Validate::isLoadedObject($wishlist) && $wishlist->id_customer == $this->context->customer->id && $wishlist->setDefault()) {
-                die(json_encode(['success' => true]));
+                $this->jsonResponse(['success' => true]);
             }
         }
 
-        die(json_encode(['error' => true]));
+        $this->jsonResponse(['error' => true]);
     }
 
     /**
@@ -255,14 +237,10 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
     public function ajaxProcessProductChangeWishlist()
     {
         if (!$this->context->customer->isLogged()) {
-            die(
-            json_encode(
-                [
-                    'success' => false,
-                    'error'   => $this->module->l('You aren\'t logged in', 'mywishlist'),
-                ]
-            )
-            );
+            $this->jsonResponse([
+                'success' => false,
+                'error'   => $this->module->l('You aren\'t logged in', 'mywishlist'),
+            ]);
         }
 
         $idProduct = (int) Tools::getValue('id_product');
@@ -279,7 +257,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
             (Validate::isLoadedObject($newWishlist) && $newWishlist->id_customer != $this->context->customer->id) ||
             (Validate::isLoadedObject($oldWishlist) && $oldWishlist->id_customer != $this->context->customer->id)
         ) {
-            die(json_encode(['success' => false, 'error' => $this->module->l('Error while moving product to another list', 'mywishlist')]));
+            $this->jsonResponse(['success' => false, 'error' => $this->module->l('Error while moving product to another list', 'mywishlist')]);
         }
 
         $res = true;
@@ -297,8 +275,18 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
         }
 
         if (!$res) {
-            die(json_encode(['success' => false, 'error' => $this->module->l('Error while moving product to another list', 'mywishlist')]));
+            $this->jsonResponse(['success' => false, 'error' => $this->module->l('Error while moving product to another list', 'mywishlist')]);
         }
-        die(json_encode(['success' => true, 'msg' => $this->module->l('The product has been correctly moved', 'mywishlist')]));
+        $this->jsonResponse(['success' => true, 'msg' => $this->module->l('The product has been correctly moved', 'mywishlist')]);
+    }
+
+    /**
+     * @param mixed $payload
+     * @return void
+     * @throws PrestaShopException
+     */
+    protected function jsonResponse($payload)
+    {
+        $this->ajaxDie(json_encode($payload));
     }
 }

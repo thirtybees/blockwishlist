@@ -41,7 +41,6 @@ class BlockWishListsendwishlistModuleFrontController extends ModuleFrontControll
     public function init()
     {
         Controllers::sendWishList();
-
-        die();
+        exit;
     }
 }

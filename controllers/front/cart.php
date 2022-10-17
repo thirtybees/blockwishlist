@@ -16,7 +16,6 @@ class BlockwishlistcartModuleFrontController extends ModuleFrontController
     public function init()
     {
         Controllers::cart();
-
-        die();
+        exit;
     }
 }

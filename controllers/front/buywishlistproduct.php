@@ -39,7 +39,6 @@ class BlockwishlistbuywishlistproductModuleFrontController extends ModuleFrontCo
     public function init()
     {
         Controllers::buyWishList();
-
-        die();
+        exit;
     }
 }
