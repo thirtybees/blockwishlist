@@ -156,13 +156,13 @@ class WishList extends \ObjectModel
         );
         if (empty($result) === false && $result != false && sizeof($result)) {
             if ($return === false) {
-                return (true);
+                return true;
             } else {
-                return ($result);
+                return $result;
             }
         }
 
-        return (false);
+        return false;
     }
 
     /**
@@ -381,7 +381,7 @@ class WishList extends \ObjectModel
                 );
                 $products[$i]['attributes_small'] = '';
                 if ($result) {
-                    foreach ($result as $k => $row) {
+                    foreach ($result as $row) {
                         $products[$i]['attributes_small'] .= $row['attribute_name'].', ';
                     }
                 }

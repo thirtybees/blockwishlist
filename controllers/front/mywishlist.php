@@ -96,7 +96,10 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
                         $wishlist->id_shop_group = $this->context->shop->id_shop_group;
                         $wishlist->name = $name;
                         $wishlist->id_customer = (int) $this->context->customer->id;
-                        !$wishlist->isDefault($wishlist->id_customer) ? $wishlist->default = 1 : '';
+                        if (! $wishlist->isDefault($wishlist->id_customer)) {
+                            $wishlist->default = 1;
+                        }
+
                         list($us, $s) = explode(' ', microtime());
                         srand($s * $us);
                         $wishlist->token = strtoupper(substr(sha1(uniqid(rand(), true)._COOKIE_KEY_.$this->context->customer->id), 0, 16));
@@ -180,7 +183,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
 
         $wishlist = new WishList((int) $idWishlist);
         if (Validate::isLoadedObject($wishlist) && $wishlist->id_customer == $this->context->customer->id) {
-            $defaultChange = $wishlist->default ? true : false;
+            $defaultChange = !!$wishlist->default;
             $idCustomer = $wishlist->id_customer;
             $wishlist->delete();
         } else {

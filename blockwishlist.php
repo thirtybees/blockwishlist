@@ -554,7 +554,6 @@ class BlockWishList extends Module
                     $this->html .= '<option value="'.(int) $wishlist['id_wishlist'].'"';
                     if ($wishlist['id_wishlist'] == $idWishlist) {
                         $this->html .= ' selected="selected"';
-                        $counter = $wishlist['counter'];
                     }
                     $this->html .= '>'.htmlentities($wishlist['name'], ENT_COMPAT, 'UTF-8').'</option>';
                 }

@@ -170,7 +170,7 @@ class Controllers
                                 }
                             } else {
                                 $images = $obj->getImages($context->language->id);
-                                foreach ($images as $k => $image) {
+                                foreach ($images as $image) {
                                     if ($image['cover']) {
                                         $products[$i]['cover'] = $obj->id.'-'.$image['id_image'];
                                         break;
@@ -243,7 +243,7 @@ class Controllers
             if (empty($idWishlist) === true) {
                 exit($module->l('Invalid wishlist', 'sendwishlist'));
             }
-            for ($i = 1; empty($_POST['email'.strval($i)]) === false; ++$i) {
+            for ($i = 1; empty($_POST['email'.$i]) === false; ++$i) {
                 $to = \Tools::getValue('email'.$i);
                 $wishlist = WishList::exists($idWishlist, $context->customer->id, true);
                 if ($wishlist === false) {
