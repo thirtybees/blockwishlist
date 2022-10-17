@@ -115,9 +115,9 @@ class Controllers
             }
             $context->smarty->assign('products', WishList::getProductByIdCustomer($context->cookie->id_wishlist, $context->customer->id, $context->language->id, null, true));
 
-            if (\Tools::file_exists_cache(_PS_THEME_DIR_.'modules/blockwishlist/blockwishlist-ajax.tpl')) {
+            if (file_exists(_PS_THEME_DIR_.'modules/blockwishlist/blockwishlist-ajax.tpl')) {
                 $context->smarty->display(_PS_THEME_DIR_.'modules/blockwishlist/blockwishlist-ajax.tpl');
-            } elseif (\Tools::file_exists_cache(dirname(__FILE__).'/blockwishlist-ajax.tpl')) {
+            } elseif (file_exists(dirname(__FILE__).'/blockwishlist-ajax.tpl')) {
                 $context->smarty->display(dirname(__FILE__).'/blockwishlist-ajax.tpl');
             } else {
                 echo $module->l('No template found', 'cart');
@@ -210,11 +210,11 @@ class Controllers
                     // Instance of module class for translations
                     $module = new BlockWishList();
 
-                    if (\Tools::file_exists_cache(_PS_THEME_DIR_.'modules/blockwishlist/views/templates/front/managewishlist.tpl')) {
+                    if (file_exists(_PS_THEME_DIR_.'modules/blockwishlist/views/templates/front/managewishlist.tpl')) {
                         $context->smarty->display(_PS_THEME_DIR_.'modules/blockwishlist/views/templates/front/managewishlist.tpl');
-                    } elseif (\Tools::file_exists_cache(__DIR__.'/views/templates/front/managewishlist.tpl')) {
+                    } elseif (file_exists(__DIR__.'/views/templates/front/managewishlist.tpl')) {
                         $context->smarty->display(__DIR__.'/views/templates/front/managewishlist.tpl');
-                    } elseif (\Tools::file_exists_cache(__DIR__.'/managewishlist.tpl')) {
+                    } elseif (file_exists(__DIR__.'/managewishlist.tpl')) {
                         $context->smarty->display(__DIR__.'/managewishlist.tpl');
                     } else {
                         echo $module->l('No template found', 'managewishlist');

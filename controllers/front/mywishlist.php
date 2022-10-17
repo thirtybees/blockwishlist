@@ -57,7 +57,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
         } elseif (!empty($action) && method_exists($this, 'ajaxProcess'.Tools::toCamelCase($action))) {
             $this->{'ajaxProcess'.Tools::toCamelCase($action)}();
         } else {
-            die(Tools::jsonEncode(['error' => 'method doesn\'t exist']));
+            die(json_encode(['error' => 'method doesn\'t exist']));
         }
     }
 
@@ -170,7 +170,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
     {
         if (!$this->context->customer->isLogged()) {
             die(
-            Tools::jsonEncode(
+            json_encode(
                 [
                     'success' => false,
                     'error'   => $this->module->l('You aren\'t logged in', 'mywishlist'),
@@ -188,7 +188,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
             $wishlist->delete();
         } else {
             die(
-            Tools::jsonEncode(
+            json_encode(
                 [
                     'success' => false,
                     'error'   => $this->module->l('Cannot delete this wishlist', 'mywishlist'),
@@ -202,7 +202,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
 
             if (count($array)) {
                 die(
-                Tools::jsonEncode(
+                json_encode(
                     [
                         'success'    => true,
                         'id_default' => $array[0]['id_wishlist'],
@@ -212,7 +212,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
             }
         }
 
-        die(Tools::jsonEncode(['success' => true]));
+        die(json_encode(['success' => true]));
     }
 
     /**
@@ -224,7 +224,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
     {
         if (!$this->context->customer->isLogged()) {
             die(
-            Tools::jsonEncode(
+            json_encode(
                 [
                     'success' => false,
                     'error'   => $this->module->l('You aren\'t logged in', 'mywishlist'),
@@ -240,11 +240,11 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
         if ($default) {
             $wishlist = new WishList((int) $idWishlist);
             if (Validate::isLoadedObject($wishlist) && $wishlist->id_customer == $this->context->customer->id && $wishlist->setDefault()) {
-                die(Tools::jsonEncode(['success' => true]));
+                die(json_encode(['success' => true]));
             }
         }
 
-        die(Tools::jsonEncode(['error' => true]));
+        die(json_encode(['error' => true]));
     }
 
     /**
@@ -256,7 +256,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
     {
         if (!$this->context->customer->isLogged()) {
             die(
-            Tools::jsonEncode(
+            json_encode(
                 [
                     'success' => false,
                     'error'   => $this->module->l('You aren\'t logged in', 'mywishlist'),
@@ -279,7 +279,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
             (Validate::isLoadedObject($newWishlist) && $newWishlist->id_customer != $this->context->customer->id) ||
             (Validate::isLoadedObject($oldWishlist) && $oldWishlist->id_customer != $this->context->customer->id)
         ) {
-            die(Tools::jsonEncode(['success' => false, 'error' => $this->module->l('Error while moving product to another list', 'mywishlist')]));
+            die(json_encode(['success' => false, 'error' => $this->module->l('Error while moving product to another list', 'mywishlist')]));
         }
 
         $res = true;
@@ -297,8 +297,8 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
         }
 
         if (!$res) {
-            die(Tools::jsonEncode(['success' => false, 'error' => $this->module->l('Error while moving product to another list', 'mywishlist')]));
+            die(json_encode(['success' => false, 'error' => $this->module->l('Error while moving product to another list', 'mywishlist')]));
         }
-        die(Tools::jsonEncode(['success' => true, 'msg' => $this->module->l('The product has been correctly moved', 'mywishlist')]));
+        die(json_encode(['success' => true, 'msg' => $this->module->l('The product has been correctly moved', 'mywishlist')]));
     }
 }
