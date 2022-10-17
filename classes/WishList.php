@@ -78,6 +78,7 @@ class WishList extends \ObjectModel
      * @param int $idWishlist
      *
      * @return bool succeed
+     * @throws \PrestaShopException
      */
     public static function incCounter($idWishlist)
     {
@@ -106,6 +107,7 @@ class WishList extends \ObjectModel
      * @param string $name
      *
      * @return false|null|string
+     * @throws \PrestaShopException
      */
     public static function isExistsByNameForUser($name)
     {
@@ -132,11 +134,12 @@ class WishList extends \ObjectModel
     /**
      * Return true if wishlist exists else false
      *
-     * @param int  $idWishlist
-     * @param int  $idCustomer
-     * @param bool $return
+     * @param int $idWishlist
+     * @param int $idCustomer
+     * @param bool | array $return
      *
-     * @return bool exists
+     * @return bool|array exists
+     * @throws \PrestaShopException
      */
     public static function exists($idWishlist, $idCustomer, $return = false)
     {
@@ -166,6 +169,7 @@ class WishList extends \ObjectModel
      * Get Customers having a wishlist
      *
      * @return array Results
+     * @throws \PrestaShopException
      */
     public static function getCustomers()
     {
@@ -187,7 +191,8 @@ class WishList extends \ObjectModel
     /**
      * Get ID wishlist by Token
      *
-     * @return array Results
+     * @return array|false Results
+     * @throws \PrestaShopException
      */
     public static function getByToken($token)
     {
@@ -208,6 +213,7 @@ class WishList extends \ObjectModel
      * Get Wishlists by Customer ID
      *
      * @return array Results
+     * @throws \PrestaShopException
      */
     public static function getByIdCustomer($idCustomer)
     {
@@ -242,6 +248,7 @@ class WishList extends \ObjectModel
      * @param int $idWishlist
      *
      * @return void
+     * @throws \PrestaShopException
      */
     public static function refreshWishList($idWishlist)
     {
@@ -329,6 +336,7 @@ class WishList extends \ObjectModel
      * Get Wishlist products by Customer ID
      *
      * @return array Results
+     * @throws \PrestaShopException
      */
     public static function getProductByIdCustomer($idWishlist, $idCustomer, $idLang, $idProduct = null, $quantity = false)
     {
@@ -393,6 +401,7 @@ class WishList extends \ObjectModel
      * Get Wishlists number products by Customer ID
      *
      * @return array Results
+     * @throws \PrestaShopException
      */
     public static function getInfosByIdCustomer($idCustomer)
     {
@@ -424,6 +433,7 @@ class WishList extends \ObjectModel
      * Add product to ID wishlist
      *
      * @return boolean succeed
+     * @throws \PrestaShopException
      */
     public static function addProduct($idWishlist, $idCustomer, $idProduct, $idProductAttribute, $quantity)
     {
@@ -474,6 +484,7 @@ class WishList extends \ObjectModel
      * Remove product from wishlist
      *
      * @return boolean succeed
+     * @throws \PrestaShopException
      */
     public static function removeProduct($idWishlist, $idCustomer, $idProduct, $idProductAttribute)
     {
@@ -518,6 +529,7 @@ class WishList extends \ObjectModel
      * Update product to wishlist
      *
      * @return boolean succeed
+     * @throws \PrestaShopException
      */
     public static function updateProduct($idWishlist, $idProduct, $idProductAttribute, $priority, $quantity)
     {
@@ -544,6 +556,7 @@ class WishList extends \ObjectModel
      * Return bought product by ID wishlist
      *
      * @return array results
+     * @throws \PrestaShopException
      */
     public static function getBoughtProduct($idWishlist)
     {
@@ -567,6 +580,7 @@ class WishList extends \ObjectModel
      * Add bought product
      *
      * @return boolean succeed
+     * @throws \PrestaShopException
      */
     public static function addBoughtProduct($idWishlist, $idProduct, $idProductAttribute, $idCart, $quantity)
     {
@@ -636,6 +650,7 @@ class WishList extends \ObjectModel
      * @param string $email
      *
      * @return bool succeed
+     * @throws \PrestaShopException
      */
     public static function addEmail($idWishlist, $email)
     {
@@ -656,6 +671,7 @@ class WishList extends \ObjectModel
      * Get email from wishlist
      *
      * @return array results
+     * @throws \PrestaShopException
      */
     public static function getEmail($idWishlist, $idCustomer)
     {
@@ -677,6 +693,7 @@ class WishList extends \ObjectModel
      * Return if there is a default already set
      *
      * @return boolean
+     * @throws \PrestaShopException
      */
     public static function isDefault($idCustomer)
     {
@@ -685,6 +702,7 @@ class WishList extends \ObjectModel
 
     /**
      * @return bool
+     * @throws \PrestaShopException
      */
     public function delete()
     {
@@ -707,6 +725,7 @@ class WishList extends \ObjectModel
      * Set current WishList as default
      *
      * @return boolean
+     * @throws \PrestaShopException
      */
     public function setDefault()
     {
@@ -721,6 +740,7 @@ class WishList extends \ObjectModel
      * @param int $idCustomer
      *
      * @return array|false|null|\PDOStatement
+     * @throws \PrestaShopException
      */
     public static function getDefault($idCustomer)
     {

@@ -38,10 +38,19 @@ class BlockWishList extends Module
 {
     const INSTALL_SQL_FILE = 'install.sql';
 
-    private $html = '';
+    /**
+     * @var string
+     */
+    private $html;
+
+    /**
+     * @var string
+     */
+    public $default_wishlist_name;
 
     /**
      * BlockWishList constructor.
+     * @throws PrestaShopException
      */
     public function __construct()
     {
@@ -65,6 +74,7 @@ class BlockWishList extends Module
 
     /**
      * @return bool
+     * @throws PrestaShopException
      */
     public function reset()
     {
@@ -82,6 +92,8 @@ class BlockWishList extends Module
      * @param bool $deleteParams
      *
      * @return bool
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      */
     public function uninstall($deleteParams = true)
     {
@@ -94,6 +106,7 @@ class BlockWishList extends Module
 
     /**
      * @return bool
+     * @throws PrestaShopException
      */
     private function deleteTables()
     {
@@ -110,6 +123,7 @@ class BlockWishList extends Module
      * @param bool $deleteParams
      *
      * @return bool
+     * @throws PrestaShopException
      */
     public function install($deleteParams = true)
     {
@@ -152,6 +166,8 @@ class BlockWishList extends Module
 
     /**
      * @return string
+     * @throws PrestaShopException
+     * @throws SmartyException
      */
     public function getContent()
     {
@@ -188,6 +204,8 @@ class BlockWishList extends Module
 
     /**
      * @return string
+     * @throws PrestaShopException
+     * @throws SmartyException
      */
     public function renderForm()
     {
@@ -270,6 +288,9 @@ class BlockWishList extends Module
      * @param int $idWishlist
      *
      * @return string
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     * @throws SmartyException
      */
     public function renderList($idWishlist)
     {
@@ -322,6 +343,12 @@ class BlockWishList extends Module
         return $helper->generateList($products, $fieldsList);
     }
 
+    /**
+     * @param $params
+     * @return string
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookDisplayProductListFunctionalButtons($params)
     {
         //TODO : Add cache
@@ -334,6 +361,12 @@ class BlockWishList extends Module
         return $this->display(__FILE__, 'blockwishlist_button.tpl');
     }
 
+    /**
+     * @param $params
+     * @return string
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookTop($params)
     {
         if ($this->context->customer->isLogged()) {
@@ -373,6 +406,11 @@ class BlockWishList extends Module
         return $this->display(__FILE__, 'blockwishlist_top.tpl');
     }
 
+    /**
+     * @param $params
+     * @return void
+     * @throws PrestaShopException
+     */
     public function hookHeader($params)
     {
         $this->context->controller->addCSS(($this->_path).'blockwishlist.css', 'all');
@@ -381,11 +419,23 @@ class BlockWishList extends Module
         $this->smarty->assign(['wishlist_link' => $this->context->link->getModuleLink('blockwishlist', 'mywishlist')]);
     }
 
+    /**
+     * @param $params
+     * @return string
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookLeftColumn($params)
     {
         return $this->hookRightColumn($params);
     }
 
+    /**
+     * @param $params
+     * @return string
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookRightColumn($params)
     {
         if ($this->context->customer->isLogged()) {
@@ -421,6 +471,12 @@ class BlockWishList extends Module
         return ($this->display(__FILE__, 'blockwishlist.tpl'));
     }
 
+    /**
+     * @param $params
+     * @return string
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookProductActions($params)
     {
         $cookie = $params['cookie'];
@@ -442,20 +498,35 @@ class BlockWishList extends Module
         return ($this->display(__FILE__, 'blockwishlist-extra.tpl'));
     }
 
-    /*
-    * Display Error from controler
-    */
-
+    /**
+     * Display Error from controler
+     *
+     * @param $params
+     * @return string
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookDisplayMyAccountBlock($params)
     {
         return $this->hookCustomerAccount($params);
     }
 
+    /**
+     * @param $params
+     * @return string
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookCustomerAccount($params)
     {
         return $this->display(__FILE__, 'my-account.tpl');
     }
 
+    /**
+     * @param $params
+     * @return string|void
+     * @throws PrestaShopException
+     */
     public function hookAdminCustomers($params)
     {
         $customer = new Customer((int) $params['id_customer']);
@@ -499,6 +570,12 @@ class BlockWishList extends Module
 
     }
 
+    /**
+     * @param $idWishlist
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     private function displayProducts($idWishlist)
     {
         $wishlist = new WishList($idWishlist);
@@ -553,6 +630,9 @@ class BlockWishList extends Module
         $this->html .= '</tbody></table>';
     }
 
+    /**
+     * @return string
+     */
     public function errorLogged()
     {
         return $this->l('You must be logged in to manage your wishlists.');

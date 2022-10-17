@@ -24,7 +24,6 @@
  */
 
 use BlockWishListModule\Controllers;
-use BlockWishListModule\WishList;
 
 if (!defined('_TB_VERSION_')) {
     exit;
@@ -35,6 +34,10 @@ if (!defined('_TB_VERSION_')) {
  */
 class BlockWishListsendwishlistModuleFrontController extends ModuleFrontController
 {
+    /**
+     * @return void
+     * @throws PrestaShopException
+     */
     public function init()
     {
         Controllers::sendWishList();

@@ -41,6 +41,7 @@ class BlockWishListViewModuleFrontController extends ModuleFrontController
 
     /**
      * Initialize content
+     * @throws PrestaShopException
      */
     public function initContent()
     {

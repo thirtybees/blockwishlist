@@ -19,6 +19,7 @@ class Controllers
      * Buy wish list logic
      *
      * @return void
+     * @throws \PrestaShopException
      */
     public static function buyWishList()
     {
@@ -51,6 +52,11 @@ class Controllers
         }
     }
 
+    /**
+     * @return void
+     * @throws \PrestaShopException
+     * @throws \SmartyException
+     */
     public static function cart()
     {
         $context = \Context::getContext();
@@ -121,6 +127,11 @@ class Controllers
         }
     }
 
+    /**
+     * @return void
+     * @throws \PrestaShopException
+     * @throws \SmartyException
+     */
     public static function manageWishList()
     {
         $context = \Context::getContext();
@@ -213,6 +224,10 @@ class Controllers
         }
     }
 
+    /**
+     * @return void
+     * @throws \PrestaShopException
+     */
     public static function sendWishList()
     {
         $context = \Context::getContext();

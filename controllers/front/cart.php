@@ -1,7 +1,6 @@
 <?php
 
 use BlockWishListModule\Controllers;
-use BlockWishListModule\WishList;
 
 if (!defined('_TB_VERSION_')) {
     exit;
@@ -9,6 +8,11 @@ if (!defined('_TB_VERSION_')) {
 
 class BlockwishlistcartModuleFrontController extends ModuleFrontController
 {
+    /**
+     * @return void
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function init()
     {
         Controllers::cart();

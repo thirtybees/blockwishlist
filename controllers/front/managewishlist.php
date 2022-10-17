@@ -23,8 +23,6 @@
  * PrestaShop is an internationally registered trademark & property of PrestaShop SA
  */
 
-use BlockWishListModule\WishList;
-
 class BlockwishlistmanagewishlistModuleFrontController extends ModuleFrontController
 {
     public function init()

@@ -27,6 +27,10 @@ if (!defined('_TB_VERSION_')) {
     exit;
 }
 
+/**
+ * @param $object
+ * @return bool
+ */
 function upgrade_module_0_3_0($object)
 {
     return ($object->registerHook('displayProductListFunctionalButtons') && $object->registerHook('top'));

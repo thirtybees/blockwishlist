@@ -29,6 +29,9 @@ use BlockWishListModule\WishList;
  */
 class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
 {
+    /**
+     * @var bool
+     */
     public $ssl = true;
 
     /**
@@ -41,6 +44,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
     }
 
     /**
+     * @throws PrestaShopException
      * @see FrontController::initContent()
      */
     public function initContent()
@@ -59,6 +63,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
 
     /**
      * Assign wishlist template
+     * @throws PrestaShopException
      */
     public function assign()
     {
@@ -153,6 +158,11 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
         $this->setTemplate('mywishlist.tpl');
     }
 
+    /**
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function ajaxProcessDeleteList()
     {
         if (!$this->context->customer->isLogged()) {
@@ -202,6 +212,11 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
         die(Tools::jsonEncode(['success' => true]));
     }
 
+    /**
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function ajaxProcessSetDefault()
     {
         if (!$this->context->customer->isLogged()) {
@@ -229,6 +244,11 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
         die(Tools::jsonEncode(['error' => true]));
     }
 
+    /**
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function ajaxProcessProductChangeWishlist()
     {
         if (!$this->context->customer->isLogged()) {

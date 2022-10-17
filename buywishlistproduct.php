@@ -32,4 +32,5 @@ require_once __DIR__.'/../../init.php';
 require_once __DIR__.'/blockwishlist.php';
 require_once __DIR__.'/controllers/front/buywishlistproduct.php';
 
+/** @noinspection PhpUnhandledExceptionInspection */
 Controllers::buyWishList();

@@ -24,7 +24,6 @@
  */
 
 use BlockWishListModule\Controllers;
-use BlockWishListModule\WishList;
 
 /**
  * Class BlockwishlistbuywishlistproductModuleFrontController
@@ -35,6 +34,7 @@ class BlockwishlistbuywishlistproductModuleFrontController extends ModuleFrontCo
 
     /**
      * @return void
+     * @throws PrestaShopException
      */
     public function init()
     {

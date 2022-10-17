@@ -27,6 +27,12 @@ if (!defined('_TB_VERSION_')) {
     exit;
 }
 
+/**
+ * @param $object
+ * @return bool
+ * @throws PrestaShopDatabaseException
+ * @throws PrestaShopException
+ */
 function upgrade_module_1_1_0($object)
 {
     $object->registerHook('displayProductListFunctionalButtons');

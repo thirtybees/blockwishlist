@@ -27,6 +27,11 @@ if (!defined('_TB_VERSION_')) {
     exit;
 }
 
+/**
+ * @return bool
+ * @throws PrestaShopDatabaseException
+ * @throws PrestaShopException
+ */
 function upgrade_module_1_1_3()
 {
     $list_fields = Db::getInstance()->executeS('SHOW FIELDS FROM `'._DB_PREFIX_.'wishlist`');
