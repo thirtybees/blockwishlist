@@ -531,7 +531,7 @@ class BlockWishList extends Module
     {
         $customer = new Customer((int) $params['id_customer']);
         if (!Validate::isLoadedObject($customer)) {
-            die (Tools::displayError());
+            throw new PrestaShopException("Customer not found");
         }
 
         $this->html = '<h2>'.$this->l('Wishlists').'</h2>';

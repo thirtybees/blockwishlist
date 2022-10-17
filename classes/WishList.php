@@ -83,7 +83,7 @@ class WishList extends \ObjectModel
     public static function incCounter($idWishlist)
     {
         if (!\Validate::isUnsignedId($idWishlist)) {
-            die (\Tools::displayError());
+            throw new \PrestaShopException("Invalid value for parameter idWishlist");
         }
         $sql = new \DbQuery();
         $sql->select('`counter`');
@@ -144,7 +144,7 @@ class WishList extends \ObjectModel
     public static function exists($idWishlist, $idCustomer, $return = false)
     {
         if (!\Validate::isUnsignedId($idWishlist) || !\Validate::isUnsignedId($idCustomer)) {
-            die (\Tools::displayError());
+            throw new \PrestaShopException("Invalid input parameter values");
         }
         $result = \Db::getInstance()->getRow(
             '
@@ -197,7 +197,7 @@ class WishList extends \ObjectModel
     public static function getByToken($token)
     {
         if (!\Validate::isMessage($token)) {
-            die (\Tools::displayError());
+            throw new \PrestaShopException("Invalid value for parameter 'token'");
         }
 
         return (\Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow(
@@ -218,7 +218,7 @@ class WishList extends \ObjectModel
     public static function getByIdCustomer($idCustomer)
     {
         if (!\Validate::isUnsignedId($idCustomer)) {
-            die (\Tools::displayError());
+            throw new \PrestaShopException("Invalid value for parameter 'idCustomer'");
         }
         if (\Shop::getContextShopID()) {
             $shopRestriction = 'AND id_shop = '.(int) \Shop::getContextShopID();
@@ -344,7 +344,7 @@ class WishList extends \ObjectModel
             !\Validate::isUnsignedId($idLang) ||
             !\Validate::isUnsignedId($idWishlist)
         ) {
-            die (\Tools::displayError());
+            throw new \PrestaShopException("Invalid input parameter values");
         }
         $products = \Db::getInstance()->executeS(
             '
@@ -405,16 +405,16 @@ class WishList extends \ObjectModel
      */
     public static function getInfosByIdCustomer($idCustomer)
     {
+        if (!\Validate::isUnsignedId($idCustomer)) {
+            throw new \PrestaShopException("Invalid value for parameter 'idCustomer'");
+        }
+
         if (\Shop::getContextShopID()) {
             $shopRestriction = 'AND id_shop = '.(int) \Shop::getContextShopID();
         } elseif (\Shop::getContextShopGroupID()) {
             $shopRestriction = 'AND id_shop_group = '.(int) \Shop::getContextShopGroupID();
         } else {
             $shopRestriction = '';
-        }
-
-        if (!\Validate::isUnsignedId($idCustomer)) {
-            die (\Tools::displayError());
         }
 
         return (\Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
@@ -442,7 +442,7 @@ class WishList extends \ObjectModel
             !\Validate::isUnsignedId($idProduct) ||
             !\Validate::isUnsignedId($quantity)
         ) {
-            die (\Tools::displayError());
+            throw new \PrestaShopException("Invalid input parameter values");
         }
         $sql = new \DbQuery();
         $sql->select('wp.`quantity`');
@@ -492,7 +492,7 @@ class WishList extends \ObjectModel
             !\Validate::isUnsignedId($idCustomer) ||
             !\Validate::isUnsignedId($idProduct)
         ) {
-            die (\Tools::displayError());
+            throw new \PrestaShopException("Invalid input parameter values");
         }
         $result = \Db::getInstance()->getRow(
             '
@@ -538,7 +538,7 @@ class WishList extends \ObjectModel
             !\Validate::isUnsignedId($quantity) ||
             $priority < 0 || $priority > 2
         ) {
-            die (\Tools::displayError());
+            throw new \PrestaShopException("Invalid input parameter values");
         }
 
         return (\Db::getInstance()->execute(
@@ -562,7 +562,7 @@ class WishList extends \ObjectModel
     {
 
         if (!\Validate::isUnsignedId($idWishlist)) {
-            die (\Tools::displayError());
+            throw new \PrestaShopException("Invalid input parameter values");
         }
 
         return (\Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
@@ -588,7 +588,7 @@ class WishList extends \ObjectModel
             !\Validate::isUnsignedId($idProduct) ||
             !\Validate::isUnsignedId($quantity)
         ) {
-            die (\Tools::displayError());
+            throw new \PrestaShopException("Invalid input parameter values");
         }
         $result = \Db::getInstance()->getRow(
             '
@@ -676,7 +676,7 @@ class WishList extends \ObjectModel
     public static function getEmail($idWishlist, $idCustomer)
     {
         if (!\Validate::isUnsignedId($idWishlist) || !\Validate::isUnsignedId($idCustomer)) {
-            die (\Tools::displayError());
+            throw new \PrestaShopException("Invalid input parameter values");
         }
 
         return (\Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
