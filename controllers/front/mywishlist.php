@@ -127,7 +127,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
                 }
             } else {
                 if ($add) {
-                    WishList::addCartToWishlist($this->context->customer->id, Tools::getValue('id_wishlist'), $this->context->language->id);
+                    throw new PrestaShopException("Not implemented");
                 } elseif ($delete && empty($idWishlist) === false) {
                     $wishlist = new WishList((int) $idWishlist);
                     if ($this->context->customer->isLogged() && $this->context->customer->id == $wishlist->id_customer && Validate::isLoadedObject($wishlist)) {
