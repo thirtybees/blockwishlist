@@ -1,1 +1,6 @@
+/translations/*
+!/translations/index.php
+
+/config*.xml
+
 *blockwishlist*.zip
