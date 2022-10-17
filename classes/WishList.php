@@ -146,15 +146,15 @@ class WishList extends \ObjectModel
         if (!\Validate::isUnsignedId($idWishlist) || !\Validate::isUnsignedId($idCustomer)) {
             throw new \PrestaShopException("Invalid input parameter values");
         }
-        $result = \Db::getInstance()->getRow(
-            '
-		SELECT `id_wishlist`, `name`, `token`
-		  FROM `'._DB_PREFIX_.'wishlist`
-		WHERE `id_wishlist` = '.(int) ($idWishlist).'
-		AND `id_customer` = '.(int) ($idCustomer).'
-		AND `id_shop` = '.(int) \Context::getContext()->shop->id
+
+        $result = \Db::getInstance()->getRow((new \DbQuery())
+            ->select('id_wishlist, name, token')
+            ->from('wishlist')
+		    ->where('id_wishlist = '.(int)$idWishlist)
+            ->where('id_customer = '.(int)$idCustomer)
+            ->where('id_shop = '.(int)\Context::getContext()->shop->id)
         );
-        if (empty($result) === false && $result != false && sizeof($result)) {
+        if ($result) {
             if ($return === false) {
                 return true;
             } else {
