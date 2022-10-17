@@ -91,7 +91,7 @@ class WishList extends \ObjectModel
         $sql->where('`id_wishlist` = '.(int) $idWishlist);
         $result = \Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
         if ($result == false || !count($result) || empty($result) === true) {
-            return (false);
+            return false;
         }
 
         return \Db::getInstance()->update(
@@ -362,10 +362,10 @@ class WishList extends \ObjectModel
             ($quantity == true ? ' AND wp.`quantity` != 0' : '').'
 		GROUP BY p.id_product, wp.id_product_attribute'
         );
-        if (empty($products) === true || !sizeof($products)) {
+        if (! $products) {
             return [];
         }
-        for ($i = 0; $i < sizeof($products); ++$i) {
+        for ($i = 0; $i < count($products); ++$i) {
             if (isset($products[$i]['id_product_attribute']) && \Validate::isUnsignedInt($products[$i]['id_product_attribute'])) {
                 $result = \Db::getInstance()->executeS(
                     '
@@ -394,7 +394,7 @@ class WishList extends \ObjectModel
             }
         }
 
-        return ($products);
+        return $products;
     }
 
     /**
@@ -502,27 +502,27 @@ class WishList extends \ObjectModel
 		WHERE `id_customer` = '.(int) ($idCustomer).'
 		AND w.`id_wishlist` = '.(int) ($idWishlist)
         );
-        if (empty($result) === true ||
-            $result === false ||
-            !sizeof($result) ||
-            $result['id_wishlist'] != $idWishlist
-        ) {
-            return (false);
+
+        if (! $result) {
+            return false;
         }
+
         // Delete product in wishlist_product_cart
-        \Db::getInstance()->execute(
+        $ret = \Db::getInstance()->execute(
             '
 		DELETE FROM `'._DB_PREFIX_.'wishlist_product_cart`
 		WHERE `id_wishlist_product` = '.(int) ($result['id_wishlist_product'])
         );
 
-        return \Db::getInstance()->execute(
+        $ret = \Db::getInstance()->execute(
             '
 		DELETE FROM `'._DB_PREFIX_.'wishlist_product`
 		WHERE `id_wishlist` = '.(int) ($idWishlist).'
 		AND `id_product` = '.(int) ($idProduct).'
 		AND `id_product_attribute` = '.(int) ($idProductAttribute)
-        );
+        ) && $ret;
+
+        return $ret;
     }
 
     /**
@@ -565,7 +565,7 @@ class WishList extends \ObjectModel
             throw new \PrestaShopException("Invalid input parameter values");
         }
 
-        return (\Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
+        $ret = \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
             '
 		SELECT wp.`id_product`, wp.`id_product_attribute`, wpc.`quantity`, wpc.`date_add`, cu.`lastname`, cu.`firstname`
 		FROM `'._DB_PREFIX_.'wishlist_product_cart` wpc
@@ -573,7 +573,9 @@ class WishList extends \ObjectModel
 		JOIN `'._DB_PREFIX_.'cart` ca ON (ca.id_cart = wpc.id_cart)
 		JOIN `'._DB_PREFIX_.'customer` cu ON (cu.`id_customer` = ca.`id_customer`)
 		WHERE wp.`id_wishlist` = '.(int) ($idWishlist)
-        ));
+        );
+
+        return is_array($ret) ? $ret : [];
     }
 
     /**
@@ -599,18 +601,22 @@ class WishList extends \ObjectModel
 			AND `id_product_attribute` = '.(int) ($idProductAttribute)
         );
 
-        if (!sizeof($result) || ($result['quantity'] - $quantity) < 0 || $quantity > $result['quantity']) {
-            return (false);
+        if (! $result) {
+            return false;
         }
 
-        \Db::getInstance()->executeS(
+        if (($result['quantity'] - $quantity) < 0 || $quantity > $result['quantity']) {
+            return false;
+        }
+
+        $cnt = (int)\Db::getInstance()->getValue(
             '
-			SELECT *
+			SELECT COUNT(1)
 			FROM `'._DB_PREFIX_.'wishlist_product_cart`
 			WHERE `id_wishlist_product`='.(int) ($result['id_wishlist_product']).' AND `id_cart`='.(int) ($idCart)
         );
 
-        if (\Db::getInstance()->NumRows() > 0) {
+        if ($cnt > 0) {
             $result2 = \Db::getInstance()->execute(
                 '
 				UPDATE `'._DB_PREFIX_.'wishlist_product_cart`
@@ -630,7 +636,7 @@ class WishList extends \ObjectModel
         }
 
         if ($result2 === false) {
-            return (false);
+            return false;
         }
 
         return (\Db::getInstance()->execute(
@@ -679,14 +685,16 @@ class WishList extends \ObjectModel
             throw new \PrestaShopException("Invalid input parameter values");
         }
 
-        return (\Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
+        $ret = \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
             '
 		SELECT we.`email`, we.`date_add`
 		  FROM `'._DB_PREFIX_.'wishlist_email` we
 		INNER JOIN `'._DB_PREFIX_.'wishlist` w ON w.`id_wishlist` = we.`id_wishlist`
 		WHERE we.`id_wishlist` = '.(int) ($idWishlist).'
 		AND w.`id_customer` = '.(int) ($idCustomer)
-        ));
+        );
+
+        return is_array($ret) ? $ret : [];
     }
 
     /**
@@ -710,8 +718,10 @@ class WishList extends \ObjectModel
         \Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'wishlist_product` WHERE `id_wishlist` = '.(int) ($this->id));
         if ($this->default) {
             $result = \Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'wishlist` WHERE `id_customer` = '.(int) $this->id_customer.' AND `id_wishlist` != '.(int) $this->id.' LIMIT 1');
-            foreach ($result as $res) {
-                \Db::getInstance()->update('wishlist', ['default' => '1'], 'id_wishlist = '.(int) $res['id_wishlist']);
+            if ($result) {
+                foreach ($result as $res) {
+                    \Db::getInstance()->update('wishlist', ['default' => '1'], 'id_wishlist = ' . (int)$res['id_wishlist']);
+                }
             }
         }
         if (isset($this->context->cookie->id_wishlist)) {
@@ -730,7 +740,7 @@ class WishList extends \ObjectModel
     public function setDefault()
     {
         if ($default = $this->getDefault($this->id_customer)) {
-            \Db::getInstance()->update('wishlist', ['default' => '0'], 'id_wishlist = '.$default[0]['id_wishlist']);
+            \Db::getInstance()->update('wishlist', ['default' => '0'], 'id_wishlist = '.(int)$default);
         }
 
         return \Db::getInstance()->update('wishlist', ['default' => '1'], 'id_wishlist = '.$this->id);
@@ -739,11 +749,11 @@ class WishList extends \ObjectModel
     /**
      * @param int $idCustomer
      *
-     * @return array|false|null|\PDOStatement
+     * @return int
      * @throws \PrestaShopException
      */
     public static function getDefault($idCustomer)
     {
-        return \Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'wishlist` WHERE `id_customer` = '.$idCustomer.' AND `default` = 1');
+        return (int) \Db::getInstance()->getValue('SELECT id_wishlist FROM `'._DB_PREFIX_.'wishlist` WHERE `id_customer` = '.$idCustomer.' AND `default` = 1');
     }
 }

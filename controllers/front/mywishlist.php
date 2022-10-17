@@ -183,11 +183,11 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
             $wishlist->delete();
 
             if ($wishlist->default) {
-                $array = WishList::getDefault($idCustomer);
-                if ($array) {
+                $default = WishList::getDefault($idCustomer);
+                if ($default) {
                     $this->jsonResponse([
                         'success'    => true,
-                        'id_default' => $array[0]['id_wishlist'],
+                        'id_default' => $default,
                     ]);
                 }
             }

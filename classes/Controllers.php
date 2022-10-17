@@ -155,7 +155,7 @@ class Controllers
                     $products = WishList::getProductByIdCustomer($idWishlist, $context->customer->id, $context->language->id);
                     $bought = WishList::getBoughtProduct($idWishlist);
 
-                    for ($i = 0; $i < sizeof($products); ++$i) {
+                    for ($i = 0; $i < count($products); ++$i) {
                         $obj = new \Product((int) ($products[$i]['id_product']), false, $context->language->id);
                         if (!\Validate::isLoadedObject($obj)) {
                             continue;
@@ -181,8 +181,8 @@ class Controllers
                                 $products[$i]['cover'] = $context->language->iso_code.'-default';
                             }
                         }
-                        $products[$i]['bought'] = false;
-                        for ($j = 0, $k = 0; $j < sizeof($bought); ++$j) {
+                        $products[$i]['bought'] = [];
+                        for ($j = 0, $k = 0; $j < count($bought); ++$j) {
                             if ($bought[$j]['id_product'] == $products[$i]['id_product'] && $bought[$j]['id_product_attribute'] == $products[$i]['id_product_attribute']) {
                                 $products[$i]['bought'][$k++] = $bought[$j];
                             }
@@ -192,7 +192,7 @@ class Controllers
                     $productBoughts = [];
 
                     foreach ($products as $product) {
-                        if (sizeof($product['bought'])) {
+                        if ($product['bought']) {
                             $productBoughts[] = $product;
                         }
                     }
