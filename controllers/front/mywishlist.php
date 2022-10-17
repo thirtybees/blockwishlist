@@ -275,8 +275,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
         $oldWishlist = new WishList((int) $idOldWishlist);
 
         //check the data is ok
-        if (!$idProduct || !is_int($idProductAttribute) || !$quantity ||
-            !is_int($priority) || ($priority < 0 && $priority > 2) || !$idOldWishlist || !$idNewWishlist ||
+        if (!$idProduct || !$quantity || !$idOldWishlist || !$idNewWishlist ||
             (Validate::isLoadedObject($newWishlist) && $newWishlist->id_customer != $this->context->customer->id) ||
             (Validate::isLoadedObject($oldWishlist) && $oldWishlist->id_customer != $this->context->customer->id)
         ) {
