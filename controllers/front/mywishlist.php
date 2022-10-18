@@ -100,9 +100,7 @@ class BlockWishListMyWishListModuleFrontController extends ModuleFrontController
                             $wishlist->default = 1;
                         }
 
-                        list($us, $s) = explode(' ', microtime());
-                        srand($s * $us);
-                        $wishlist->token = strtoupper(substr(sha1(uniqid(rand(), true)._COOKIE_KEY_.$this->context->customer->id), 0, 16));
+                        $wishlist->token = strtoupper(Tools::passwdGen(16));
                         $wishlist->add();
 
                         Mail::Send(
