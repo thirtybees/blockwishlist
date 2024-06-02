@@ -25,6 +25,8 @@
 
 namespace BlockWishListModule;
 
+use Context;
+
 if (!defined('_TB_VERSION_')) {
     exit;
 }
@@ -724,8 +726,10 @@ class WishList extends \ObjectModel
                 }
             }
         }
-        if (isset($this->context->cookie->id_wishlist)) {
-            unset($this->context->cookie->id_wishlist);
+
+        $cookie = Context::getContext()->cookie;
+        if (isset($cookie->id_wishlist)) {
+            unset($cookie->id_wishlist);
         }
 
         return (parent::delete());
